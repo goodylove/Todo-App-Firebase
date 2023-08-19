@@ -1,27 +1,18 @@
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import Todos from "./Todos";
+import useTodos from "../Hooks/useTodos";
 
 function Todo() {
-  const [inputValue, setInputValue] = useState("");
-  const [value, setValue] = useState([]);
-
-  const handleValueChange = function (text) {
-    setValue([...value, text]);
-    console.log(value, text);
-  };
-  const transformText = function (text) {
-    let first = text.split(" ");
-    let type = first.map(
-      (item) => item.slice(0, 1).toUpperCase() + item.slice(1)
-    );
-    return type.join(" ");
-  };
-
-  const handleSumbit = function (e) {
-    e.preventDefault();
-    handleValueChange(inputValue);
-  };
+  const {
+    handleSumbit,
+    updatTodos,
+    isInputEmpty,
+    todos,
+    deleteToDos,
+    inputValue,
+    setInputValue,
+  } = useTodos();
   return (
     <div className="border-2 md:w-[50%] w-full  h-auto bg-white rounded-md shadow-xl">
       <h3 className="flex justify-center p-3 font-bold">TODO APP</h3>
@@ -41,24 +32,31 @@ function Todo() {
           <AiOutlinePlus size={30} />
         </button>
       </form>
+      {isInputEmpty && (
+        <p className="pl-5 text-red-500">
+          please add a text to the input value
+        </p>
+      )}
 
-      {value && (
-        <ul>
-          {value.map((item, index) => {
+      {todos && (
+        <ul className="gap-20">
+          {todos.map((item, index) => {
             return (
               <Todos
                 key={index}
                 todo={item}
-                transformFirstLette={transformText}
+                toggle={updatTodos}
+                deleteToDo={deleteToDos}
               />
             );
           })}
         </ul>
       )}
-      <p className="text-center font-thin text-lg">
-        {" "}
-        You Have {value.length} todos
-      </p>
+      {todos.length < 1 ? null : (
+        <p className="text-center font-thin text-lg">
+          You Have {todos.length} todos
+        </p>
+      )}
     </div>
   );
 }
