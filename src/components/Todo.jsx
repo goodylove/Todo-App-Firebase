@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { AiOutlineDelete } from "react-icons/ai";
+import Todos from "./Todos";
 
 function Todo() {
   const [inputValue, setInputValue] = useState("");
@@ -41,17 +41,24 @@ function Todo() {
           <AiOutlinePlus size={30} />
         </button>
       </form>
-      {value &&
-        value.map((value, index) => {
-          return (
-            <div key={index}>
-              <div className="bg-gray-400 p-5 m-3 flex items-center justify-between text-white cursor-pointer">
-                <span>{transformText(value)}</span>
-                <AiOutlineDelete size={20} color="black" />
-              </div>
-            </div>
-          );
-        })}
+
+      {value && (
+        <ul>
+          {value.map((item, index) => {
+            return (
+              <Todos
+                key={index}
+                todo={item}
+                transformFirstLette={transformText}
+              />
+            );
+          })}
+        </ul>
+      )}
+      <p className="text-center font-thin text-lg">
+        {" "}
+        You Have {value.length} todos
+      </p>
     </div>
   );
 }
